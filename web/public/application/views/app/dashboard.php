@@ -63,8 +63,8 @@
                             </div>
                         </div>
                         <div class="col-xl-3 col-md-6">
-                            <h6>Processing</h6>
-                            <h5 class="m-b-30 f-w-700"><?php $iduser = $this->session->userdata('id'); $v2 = $this->db->query("select * FROM pokemon WHERE idusuario = $iduser AND status = 1");print $v2->num_rows();?><span class="text-c-green m-l-10"></span></h5>
+                            <h6>Nº of Lists</h6>
+                            <h5 class="m-b-30 f-w-700"><?php $iduser = $this->session->userdata('id'); $v2 = $this->db->query("select * FROM contact_import WHERE idusuario = $iduser AND status = 1");print $v2->num_rows();?><span class="text-c-green m-l-10"></span></h5>
                                 <!-- <span class="text-c-red m-l-10">-0.5%</span></h5> -->
                             <div class="progress">
                                 <div class="progress-bar bg-c-blue" style="width:100%"></div>
@@ -74,8 +74,8 @@
                             <h6>Successfully Imported</h6>
                             <h5 class="m-b-30 f-w-700"><?php 
                                                         $iduser = $this->session->userdata('id'); 
-                                                        $v3 = $this->db->query("select * FROM trade WHERE status = 1 AND idusuario = $iduser");
-                                                        print $v3->num_rows();
+                                                        $v3 = $this->db->query("select * from contacts where status = 1 AND idusuario = $iduser");
+                                                        echo $v3->num_rows();
                                                         ?><span class="text-c-green m-l-10"></span></h5>
                             <div class="progress">
                                 <div class="progress-bar bg-c-green" style="width:100%"></div>
