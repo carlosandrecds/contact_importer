@@ -85,14 +85,11 @@
                             <h6>Total Contacts</h6>
                             <h5 class="m-b-30 f-w-700"><?php 
                                 $iduser = $this->session->userdata('id'); 
-                                $query = $this->db->query("select SUM(bx) as total from pokemon where status = 1 AND idusuario = $iduser");
 
-                                foreach ($query->result() as $row)
-                                {
-                                    $result_bx_selection = $row->total;
-                                }
+                                $query = $this->db->query("select * from contacts where status = 1 AND idusuario = $iduser")->num_rows();
+                                $v1 = $this->db->query("select * FROM logs WHERE status = 1 AND idusuario = $iduser")->num_rows();
 
-                                echo $result_bx_selection;
+                                echo $query + $v1;
                                 ?><span class="text-c-green m-l-10"></span></h5>
                             <div class="progress">
                                 <div class="progress-bar bg-c-yellow" style="width:100%"></div>
