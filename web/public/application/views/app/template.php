@@ -207,23 +207,15 @@
 												</a>
 											</li>		
 
-											<!-- <li>
+											<li>
 												<a href="<?=base_url().'Logs'; ?>" class="waves-effect waves-dark">
 													<span class="pcoded-micon">
-														<i class="fa fa-leanpub"></i>
+														<i class="fa fa-user-times"></i>
 													</span>
-													<span class="pcoded-mtext">Order History</span>
+													<span class="pcoded-mtext">Error Log</span>
 												</a>
 											</li>	
-
-											<li>
-												<a href="<?=base_url().'Catalog'; ?>" class="waves-effect waves-dark">
-													<span class="pcoded-micon">
-														<i class="fa fa-shopping-basket"></i>
-													</span>
-													<span class="pcoded-mtext">Catalog</span>
-												</a>
-											</li>																	 -->
+																
 										</ul>
 							</div>
 						</nav>						

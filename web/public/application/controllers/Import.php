@@ -269,7 +269,7 @@ class Import extends CTRL_PAI {
 		$readCSV = $this->readCsv($file, $c1, $c2, $c3, $c4, $c5, $c6);
 
 		if(!$readCSV){
-			echo 'Deu ruim por enquanto';
+			$this->session->set_flashdata('message', msg_json('There is no contacts to add! Please check your CSV file', 2) );
 		}
 
 		if ( $this->db->insert($this->configuracao->tabela, $this->dados) ){
@@ -350,10 +350,35 @@ class Import extends CTRL_PAI {
 			$csvCreditCard 	= $value['cc']; 
 			$csvEmail 		= $value['email']; 
 
+			//CHECK IF THE CONTACT ALREADY EXISTS
+			if($this->checkIfContactExists($csvEmail)){
+				//INSERT LOG
+				$this->insertLog($csvEmail, $csvName, $cause = 'The email already exists');
+				continue;
+			}
+
+			//VALIDATE NAME
+			if( $this->validateName($csvName) ){
+				$this->insertLog($csvEmail, $csvName, $cause = 'The contact name is invalid');
+				continue;
+			}
+
+			// SECOND VALIDATE DATE FORMAT
+			if(!$this->validateBirthDate($csvDateOfBirth) ){
+				$this->insertLog($csvEmail, $csvName, $cause = 'The date format is invalid');
+				continue;
+			}
+
+			//VALIDATE THE EMAIL
+			if (!filter_var($csvEmail, FILTER_VALIDATE_EMAIL)) {
+				$this->insertLog($csvEmail, $csvName, $cause = 'The Email provided is invalid');
+				continue;
+			}
+
 			$res = $this->writeContactsOnDatabase($csvName, $csvDateOfBirth, $csvPhone, $csvAddress, $csvCreditCard, $csvEmail);
 		}
 
-		if($res){
+		if(isset($res)){
 			return true;
 		}else{
 			return false;
@@ -364,26 +389,9 @@ class Import extends CTRL_PAI {
 
 		$iduser = $this->session->userdata('id');
 
-		//FIRST VALIDATE NAME
-		if( $this->validateName($csvName) ){
-			$this->session->set_flashdata('message', msg_json('The name: '.$csvName.' is not valid. Remove the special character, The process was aborted', 2) );
-			redirect(site_url($this->router->class));
-		}
-
-		// SECOND VALIDATE DATE FORMAT
-		if(!$this->validateBirthDate($csvDateOfBirth) ){
-			$this->session->set_flashdata('message', msg_json('There was a problem in the data format of value: '.$csvDateOfBirth.' ', 2) );
-			redirect(site_url($this->router->class));
-		}
 
 		//GET THE FRANCHISE
 		$franchise = $this->getCardBrand($csvCreditCard);
-		
-		//VALIDATE THE EMAIL
-		if (!filter_var($csvEmail, FILTER_VALIDATE_EMAIL)) {
-			$this->session->set_flashdata('message', msg_json('The email is not valid: '.$csvEmail.' ', 2) );
-			redirect(site_url($this->router->class));
-		}
 		
 		//GET THE LAST 4 DIGITS
 		$lastDigitsCreditCard = substr($csvCreditCard, -4);
@@ -396,7 +404,7 @@ class Import extends CTRL_PAI {
 		if($query){
 			return true;
 		}else{
-			return false;
+			return null;
 		}
 		
 	}
@@ -517,5 +525,29 @@ class Import extends CTRL_PAI {
 		}
 
 		return "unknown"; //unknown for this system
+	}
+
+	//CHECK IF THE CONTACT ALREADY EXISTS
+	public function checkIfContactExists($email){
+
+		$iduser = $this->session->userdata('id');
+
+		$query = $this->db->query("select * from contacts where email = '$email' AND status = 1 AND idusuario = $iduser");	
+
+		if( $query->num_rows() > 0 ){
+			return true;
+		}else{
+			return false;
+		}	
+	}
+
+	//INSERT LOG
+	public function insertLog($email, $name, $cause){
+
+		$iduser = $this->session->userdata('id');
+
+		$date = date("Y-m-d h:i:sa");
+
+		$query = $this->db->query("insert into logs (idusuario, email, data, name, cause) values ($iduser, '$email', '$date', '$name', '$cause')");	
 	}
 }
