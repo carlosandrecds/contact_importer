@@ -1,68 +1,103 @@
-# PokeTrade 
-O projeto "Poketrade" é um programa criado para auxiliar os treinadores a trocarem seus pokemons com outros treinadores. O software utiliza um critério para validar uma troca como sendo justa ou não sendo este o "base experience". Com base no "base experience" de cada pokemon ou sua soma o software utiliza um padrão de similaridade para avaliar uma troca como sendo justa ou não.
+# Contact Importer system 
+The system was developed for evaluation purposes. The "Contact importer" platform was created to allow a "CSV" file to be submitted and your contacts to be imported into the system.
+
+Inside the "root" directory of the project there are some files (CSV spreadsheets) that can be used as tests for the required business rules.
+
+Tests can be performed as follows: 
+
+# 1 Creating an account.
 
 
-1. A aplicação funciona de uma forma bem simples, primeiro você precisa acessar sua conta e adicionar os pokemons no catálogo como
-mostrado na imagem abaixo:
-
-PS: Os pokemons podem ser adicionados dessa forma para facilitar o uso da aplicação.
-
-![Screenshot](docs/Catalog.png)
+1.1. Click in the "Sign up here" and complete the form with your infos to login and use the system
 
 
-2. Após adicionar os pokemons que desejar click no botão a esquerda da tela chamado de "Place a trade" para adicionar uma ordem de troca:
-
-![Screenshot](docs/place_a_trade.png)
-
-Clique no botão verde "Add a not listed" como mostrado na imagem acima.
-
-3. Após isso de um um nome para a ordem e selecione os pokemons que deseja adicionar a ordem, o máximo de pokemons permitidos são de 6 e o mínimo um pokemon. 
-
-![Screenshot](docs/ordem.png)
-
-Repare no botão abaixo chamado de "Availability", ao selecionar a opção "Available" a ordem ficará visível para todos os usuários no sistema, ou seja, sua ordem estara de disponível. 
-
-4. Um ponto importante a se considerar é a base de experiencia dos seus pokemons, que ficaram visíveis na aba "Place a trade" como mostrado na imagem abaixo:
-
-![Screenshot](docs/ordem_e.png)
-
-Esse número é importante devido ao fato de que ele será utilizado como critério para se considerar uma troca justa do seu set (os pokemons da sua ordem) com o set do outro treinador.
-
-5. Depois desse processo vá ao dashboard para poder visualizar as ordems abertas por outros treinadores. As ordems podem ser vistas no quadro "Trades opportunities". As ordems que podem ser trocadas estaram na cor laranja. Você poderá clicar na ordem e será exibida uma tela como essa:
-
-![Screenshot](docs/dash.png)
-
-6. Atente-se a seta que indica o set que você quer dar em troca e a esquerda o set que você quer adquirir de outro trainador.
-Repare que o sistema informa TBE (Total base experience) do set do outro trainador e também informa o seu no dashboard junto com as outros ordems porem com o botão de trade em vermelho. Isso serve para fins de comparação. O sistema considera uma troca justa com os TBEs diferenciando-se no máximo até 300 pontos. 
-
-Para efetivar a troca é preciso clicar no botão "TRADE" caso a troca não seja justa a seguinte tela será exibida:
-
-![Screenshot](docs/Not_play.png)
+![Screenshot](docs/creating_account.png)
+![Screenshot](docs/creating_account2.png)
 
 
-Caso a troca seja justa os pokemons serão trocados mediante a seguinte tela de sucesso:
+# The menu left bar can be used like:
 
-![Screenshot](docs/success.png)
+![Screenshot](docs/menu.png)
 
-Após uma troca efetiva o sistema irá remover as ordens de ambos os lados. 
+1.2.1. Dashboard: Use to get stats your imports
+
+1.2.2. Import Categories: Use to give categories to your imports to make easy your life ;)
+
+1.2.3. Contacts import: Use to import your CSV files and to see the list of it;
+
+1.2.4. Contact list: Here you have a list of all your imported contacts, all of them is editable;
+
+1.2.5. Error log: Here you see the contacts from your CSV files that were not imported due to erros in your CSV;
 
 
+# 2 Running tests: 
+
+2.1. First create a category of imports, by default we already created one for you, but feel free to create as much as you want, this can help you organize yuor routines.
+
+![Screenshot](docs/cate.png)
+
+2.2. Now go to the "Contact import" tab to upload your first CSV files and then click in "Add A Not Listed" to add a new one. 
+
+Here we will show you how to access the CSV files, populate the DB and and execute some tests.
+
+2.2.1. First populate the database using the file called "populate.csv" that is in the root directory of the project. Make the upload selecting the file as shows below.
+
+- Give a name
+- Select the category 
+- Select the file "populate.csv"
+- Now select the column fields (These are the headers of each column in your file) in these order: 
+
+    Name
+
+    Date of birth
+
+    Phone 
+
+    Address
+
+    Credit Card
+
+    Email
+
+![Screenshot](docs/populate.png)
+
+Click in the "Add" button and then go to the tab called "Contact List" and check the imported contacts
+
+2.2.2. You will notice that some contacts were not imported, This was done on purpose, to show some system filters. Go to the tab "Error log" and then you will have a overview 
+of what happened with this registry. In the column "Cause of the error" you can see why this specific contact was not imported.
+
+
+## 3 Technical Mentions
+
+3.1. The database details for connection is in .ENV file in the root of the system, so you can check:
+
+- Encrypted fields
+- Storage of informations
+
+
+3.2. The CSV files are stored in the folowing path:
+
+web/public/files/samples
+
+___
+
+## Technical stuffs
 
 ## Overview
 
-1. [Intale os pre requisitos](#install-prerequisites)
+1. [Install prerequisites](#install-prerequisites)
 
-    Antes de comecar tenha certeza de que possui os pre requisitos para inicar a aplicacao.
+    Before starting make sure you have the prerequisites to start the application.
 
-2. [Clone o projeto](#clone-the-project)
+2. [clone the project](#clone-the-project)
 
-    Faca o download no repositório do GITHUB.
+    Download it from the GITHUB repository.
 
-3. [Abra a aplicacao](#run-the-application)
+3. [open the application](#run-the-application)
 
-    Ate aqui tudo está configurado para rodar.
+    So far everything is configured to run.
 
-4. [Comandos do Docker](#use-docker-commands)
+4. [Docker Commands](#use-docker-commands)
 
     When running, you can use docker commands for doing recurrent operations.
 
@@ -70,19 +105,19 @@ ___
 
 ## Install prerequisites
 
-Para rodar os comandos do docker sem usar o sudo **sudo** voce precisa adicionar o docker **docker** ao grupo **your-user**:
+To run docker commands without using sudo **sudo** you need to add docker **docker** to the **your-user** group:
 
 ```
 sudo usermod -aG docker your-user
 ```
 
-Requisitos :
+Requisites :
 
 * [Git](https://git-scm.com/downloads)
 * [Docker](https://docs.docker.com/engine/installation/)
 * [Docker Compose](https://docs.docker.com/compose/install/)
 
-Check com o `docker-compose` se tudo está devidamente instalado : 
+Check with `docker-compose` if everything is properly installed : 
 
 ```sh
 which docker-compose
@@ -97,7 +132,7 @@ which docker-compose
 * [Composer](https://hub.docker.com/_/composer/)
 
 
-As imagens estao utilizando as seguintes portas :
+The images are using the following ports:
 
 | Server     | Port |
 |------------|------|
@@ -106,18 +141,18 @@ As imagens estao utilizando as seguintes portas :
 
 ___
 
-## Clone o projeto
+## Clone the projeto
 
-Utilize este comando :
+Use this command :
 
 ```sh
-git clone git@github.com:carlosandrecds/poketrade.git
+git clone git@github.com:carlosandrecds/contact_importer.git
 ```
 
-Va para o diretório baixado :
+Go to the project folder :
 
 ```sh
-cd poketrade
+cd contact_importer
 ```
 
 ### Project tree
@@ -125,6 +160,7 @@ cd poketrade
 ```sh
 .
 ├── Makefile
+├── populate.csv
 ├── README.md
 ├── data
 │   └── db
@@ -154,7 +190,7 @@ cd poketrade
 ___
 
 
-## Abra a aplicacao
+## Open the application
 
 1. Start the application :
 
@@ -162,17 +198,17 @@ ___
     docker-compose up -d
     ```
 
-    **Paciencia, isso pode levar alguns minutos...**
+    **Patience, this may take a few minutes...**
 
     ```sh
     docker-compose logs -f 
     ```
 
-2. Abra o projeto no seu navegador favorito :
+2. Open the project in your favorite browser:
 
     * [http://localhost:80](http://localhost:80/)
 
-3. Parar a aplicacao
+3. To stop the application
 
     ```sh
     docker-compose down -v
@@ -181,5 +217,6 @@ ___
 ___
 
 ## Help us
+With love and carring for the tech team! May the force be you guys. 
 
 carlosandrecds@gmail.com
